@@ -11,9 +11,17 @@ from os import listdir, path, remove
 from numpy import ndarray, float32, array, expand_dims, argsort
 
 from PyQt6 import uic
-from PyQt6.QtWidgets import QFileDialog, QMessageBox, QProgressBar, QMainWindow, QListWidgetItem, QApplication
+from PyQt6.QtWidgets import (
+    QFileDialog,
+    QMessageBox,
+    QProgressBar,
+    QMainWindow,
+    QListWidgetItem,
+    QApplication,
+)
 from PyQt6.QtGui import QPixmap, QColor
 from PyQt6.QtCore import QThread, pyqtSignal, Qt
+import webbrowser
 from PIL import Image, ImageFilter
 
 from onnxruntime import InferenceSession
@@ -28,8 +36,8 @@ MODEL = None
 # Get current location
 
 # If operating system is windows
-dir_path = path.dirname('./')
-saved_model_path = (dir_path +'/../model/mobilenet_model.onnx')
+dir_path = path.dirname("./")
+saved_model_path = dir_path + "/../model/mobilenet_model.onnx"
 # Check there is a model file on the given dir
 if not path.exists(saved_model_path):
     ERROR = "Model dosyası bulunamadı. Lütfen model dosyasını kontrol edin."
@@ -38,14 +46,20 @@ if not path.exists(saved_model_path):
 # Read class names from a file
 class_names = {}
 try:
-    with open(dir_path + '/desteklenen_polenler.txt', 'r') as file:
+    with open(dir_path + "/desteklenen_polenler.txt", "r") as file:
         if not file:
-            raise Exception("Sınıf isimleri okunurken bir hata oluştu. Lütfen tekrar deneyin.")
+            raise Exception(
+                "Sınıf isimleri okunurken bir hata oluştu. Lütfen tekrar deneyin."
+            )
         for line in file:
             class_str, key = line.strip().split(":")
             class_names[int(key)] = class_str
 except Exception as e:
-    ERROR = "Sınıf isimleri okunurken bir hata oluştu. Lütfen tekrar deneyin. Hata kodu: " + str(e)
+    ERROR = (
+        "Sınıf isimleri okunurken bir hata oluştu. Lütfen tekrar deneyin. Hata kodu: "
+        + str(e)
+    )
+
 
 class LoadModelThread(QThread):
     finished = pyqtSignal()
@@ -63,16 +77,22 @@ class LoadModelThread(QThread):
             # exit the thread
         self.finished.emit()
 
+
 class ClassifyThread(QThread):
     finished = pyqtSignal(ndarray)
+
     def __init__(self, processed_image):
         super(ClassifyThread, self).__init__()
         self.processed_image = processed_image
+
     def run(self):
         input_name = MODEL.get_inputs()[0].name
         output_name = MODEL.get_outputs()[0].name
-        prediction = MODEL.run([output_name], {input_name: self.processed_image.astype(float32)})
+        prediction = MODEL.run(
+            [output_name], {input_name: self.processed_image.astype(float32)}
+        )
         self.finished.emit(prediction[0])
+
 
 class Ui(QMainWindow):
     def __init__(self):
@@ -81,14 +101,15 @@ class Ui(QMainWindow):
         Connect the button signals to their respective slots.
         """
         super(Ui, self).__init__()
-        uic.loadUi('ui.ui', self)  # Load the .ui file
+        self.selected_class_name = "Hata!"
+        uic.loadUi("ui.ui", self)  # Load the .ui file
 
         self.classifyButton.setEnabled(False)
         self.pushButton.clicked.connect(self.load_img)
         self.classifyButton.clicked.connect(self.classify)
         self.pushButton_2.clicked.connect(self.clear)
-
         self.listWidget.itemClicked.connect(self.display_predicted_image)
+        self.pushButton_4.clicked.connect(self.google_search)
 
         self.show()
         # If ERROR str is not empty show the error message
@@ -103,7 +124,9 @@ class Ui(QMainWindow):
             exit(1)
 
         else:
-            self.loading_popup_show("Lütfen Bekleyiniz!\nGereken model dosyaları yükleniyor...\n")
+            self.loading_popup_show(
+                "Lütfen Bekleyiniz!\nGereken model dosyaları yükleniyor...\n"
+            )
             # Create an instance of the LoadModelThread
             self.m_thread = LoadModelThread()
             self.m_thread.finished.connect(self.loading_popup_hide)
@@ -114,8 +137,10 @@ class Ui(QMainWindow):
         Display the reference image of the selected class in the QListWidget.
         """
         try:
-            class_name = item.text().split(":")[0]
-            image_dir = dir_path + '/../referans_polen/' + class_name + '/'
+            self.selected_class_name = item.text().split(":")[0]
+            image_dir = (
+                dir_path + "/../referans_polen/" + self.selected_class_name + "/"
+            )
             image_files = listdir(image_dir)
             image_path = path.join(image_dir, image_files[0])
 
@@ -125,24 +150,48 @@ class Ui(QMainWindow):
 
             # Print only edges
             img = Image.open(image_path)
-            edges = img.filter(ImageFilter.FIND_EDGES)
+            blur = img.filter(ImageFilter.GaussianBlur(3))
+            edges = blur.filter(ImageFilter.CONTOUR)
+            edges = edges.filter(ImageFilter.FIND_EDGES)
+            edges = edges.filter(ImageFilter.MaxFilter(5))
             # revert black areas to white and white to black
-            edges = edges.point(lambda p: 255 - p)
-            edges.save('edges.jpg')
-            pixmap = QPixmap('edges.jpg')
+            # edges = edges.point(lambda p: 255 - p)
+            edges.save("edges.jpg")
+            pixmap = QPixmap("edges.jpg")
             self.label_9.setPixmap(pixmap)
             # remove the edges image
-            remove('edges.jpg')
+            remove("edges.jpg")
+
+            # Reverse the colors and print
+            img = Image.open(image_path)
+            img = img.convert("L")
+            img = img.point(lambda p: 255 - p)
+            img.save("reversed.jpg")
+            pixmap = QPixmap("reversed.jpg")
+            self.label_10.setPixmap(pixmap)
+            # remove the reversed image
+            remove("reversed.jpg")
+
         except Exception as e:
             print("Referans görüntüsü yüklenirken bir hata oluştu. Hata kodu:", e)
             self.label_9.setText("Referans görüntüsü yüklenirken bir hata oluştu.")
 
+    def google_search(self):
+        """Search the query in google"""
+        if self.listWidget.count() == 0:
+            return
+
+        url = "https://www.google.com/search?q=" + self.selected_class_name
+        webbrowser.open_new_tab(url)
+
     def loading_popup_show(self, str):
-        """ Show the information """
+        """Show the information"""
         self.msg = QMessageBox()
         self.msg.setIcon(QMessageBox.Icon.Information)
         self.msg.setStandardButtons(QMessageBox.StandardButton.NoButton)
-        self.msg.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
+        self.msg.setWindowFlags(
+            Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint
+        )
         self.msg.setText(str)
 
         self.progress = QProgressBar(self.msg)
@@ -152,15 +201,14 @@ class Ui(QMainWindow):
         self.progress.setValue(0)
         self.msg.show()
 
-
     def loading_popup_hide(self):
-        """ Hide the information """
+        """Hide the information"""
         # delete the message
         self.msg.deleteLater()
         self.progress.deleteLater()
 
     def loading_popup_hide(self):
-        """ Hide the information """
+        """Hide the information"""
         # delete the message
         self.msg.deleteLater()
 
@@ -181,7 +229,12 @@ class Ui(QMainWindow):
         Set the image name to another QLabel.
         """
         try:
-            fname = QFileDialog.getOpenFileName(self, 'Open file', dir_path, "Image files (*.jpg *.png *.bmp *.heic *.jpeg)")
+            fname = QFileDialog.getOpenFileName(
+                self,
+                "Open file",
+                dir_path,
+                "Image files (*.jpg *.png *.bmp *.heic *.jpeg)",
+            )
         except Exception as e:
             print("Seçilen görüntü açılamadı Hata kodu:", e)
             return
@@ -202,7 +255,7 @@ class Ui(QMainWindow):
         Display the top 5 predicted classes and their probabilities in a QListWidget.
         """
         original = Image.open(self.image_path).resize((50, 50))
-        original = original.convert('RGB')
+        original = original.convert("RGB")
         numpy_image = array(original)
         image_batch = expand_dims(numpy_image, axis=0)
         processed_image = image_batch / 255.0
@@ -229,6 +282,7 @@ class Ui(QMainWindow):
         # Set the background color of the top 5 classes to green
         item = self.listWidget.item(0)
         item.setBackground(QColor(0, 255, 0))
+
 
 app = QApplication([])
 
