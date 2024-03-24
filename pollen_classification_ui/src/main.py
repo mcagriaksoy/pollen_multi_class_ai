@@ -23,7 +23,7 @@ from PyQt6.QtGui import QPixmap, QColor
 from PyQt6.QtCore import QThread, pyqtSignal, Qt
 import webbrowser
 from PIL import Image, ImageFilter
-
+from folium import Map, Polygon
 from onnxruntime import InferenceSession
 
 # Error message definition
@@ -37,7 +37,7 @@ MODEL = None
 
 # If operating system is windows
 dir_path = path.dirname("./")
-saved_model_path = dir_path + "/../model/mobilenet_model.onnx"
+saved_model_path = dir_path + "/../model/model_v13.onnx"
 # Check there is a model file on the given dir
 if not path.exists(saved_model_path):
     ERROR = "Model dosyası bulunamadı. Lütfen model dosyasını kontrol edin."
@@ -45,15 +45,18 @@ if not path.exists(saved_model_path):
 # List of class names
 # Read class names from a file
 class_names = {}
+polen_locations = {}
+
 try:
     with open(dir_path + "/desteklenen_polenler.txt", "r") as file:
         if not file:
             raise Exception(
-                "Sınıf isimleri okunurken bir hata oluştu. Lütfen tekrar deneyin."
+                "Veritabanı dosyası okunurken bir hata oluştu. Lütfen tekrar deneyin."
             )
         for line in file:
-            class_str, key = line.strip().split(":")
-            class_names[int(key)] = class_str
+            parts = line.split(":")
+            class_names[int(parts[1])] = parts[0].strip()
+            polen_locations[int(parts[1])] = parts[2].strip()
 except Exception as e:
     ERROR = (
         "Sınıf isimleri okunurken bir hata oluştu. Lütfen tekrar deneyin. Hata kodu: "
@@ -105,11 +108,20 @@ class Ui(QMainWindow):
         uic.loadUi("ui.ui", self)  # Load the .ui file
 
         self.classifyButton.setEnabled(False)
+        self.pushButton_4.setEnabled(False)
+        self.pushButton_5.setEnabled(False)
+        self.pushButton_6.setEnabled(False)
+
         self.pushButton.clicked.connect(self.load_img)
         self.classifyButton.clicked.connect(self.classify)
         self.pushButton_2.clicked.connect(self.clear)
         self.listWidget.itemClicked.connect(self.display_predicted_image)
+        self.listWidget_4.itemClicked.connect(self.show_locations)
         self.pushButton_4.clicked.connect(self.google_search)
+        self.pushButton_5.clicked.connect(self.show_global_map)
+        self.pushButton_6.clicked.connect(self.show_local_map)
+
+        self.fill_class_list()
 
         self.show()
         # If ERROR str is not empty show the error message
@@ -131,6 +143,56 @@ class Ui(QMainWindow):
             self.m_thread = LoadModelThread()
             self.m_thread.finished.connect(self.loading_popup_hide)
             self.m_thread.start()
+
+    def show_locations(self, item):
+        """Show the location of the selected class on the map"""
+        self.listWidget_2.clear()
+
+        # find selected name in the class names
+        for key, value in class_names.items():
+            if value == item.text():
+                selected_class_num = key
+                break
+
+        self.listWidget_2.addItem(polen_locations[selected_class_num])
+
+    def fill_class_list(self):
+        """
+        Fill the QListWidget with the class names.
+        """
+
+        for key, value in class_names.items():
+            self.listWidget_4.addItem(value)
+
+    def show_global_map(self):
+        """
+        Show the global map in a web browser.
+        """
+        if "global_map.html" in listdir():
+            webbrowser.open_new_tab("global_map.html")
+            return
+        m = Map(location=[39.9334, 32.8597], zoom_start=2)
+        m.save("global_map.html")
+        webbrowser.open_new_tab("global_map.html")
+
+    def show_local_map(self):
+        """
+        Show the local map in a web browser.
+        """
+        if "local_map.html" in listdir():
+            webbrowser.open_new_tab("local_map.html")
+            return
+        # Show turkey only!
+        m = Map(location=[39.9334, 32.8597], zoom_start=6)
+        polygon_coords = [[42, 26], [42, 45], [36, 45], [36, 26]]
+        # Add a Polygon to the map
+        Polygon(
+            locations=polygon_coords,  # coordinates for the polygon (list of lists)
+            color="blue",  # color of the polygon
+            fill=True,  # fill the polygon with color
+            fill_color="blue",  # color to fill the polygon
+        ).add_to(m)
+        m.save("local_map.html")
 
     def display_predicted_image(self, item):
         """
@@ -219,8 +281,14 @@ class Ui(QMainWindow):
         self.listWidget.clear()
         self.label_3.clear()
         self.label_9.clear()
+        self.label_10.clear()
         self.label_2.clear()
         self.label.clear()
+
+        self.classifyButton.setEnabled(False)
+        self.pushButton_4.setEnabled(False)
+        self.pushButton_5.setEnabled(False)
+        self.pushButton_6.setEnabled(False)
 
     def load_img(self):
         """
@@ -243,6 +311,7 @@ class Ui(QMainWindow):
         self.clear()
 
         self.classifyButton.setEnabled(True)
+
         self.image_path = fname[0]
         pixmap = QPixmap(self.image_path)
         self.label.setPixmap(pixmap)
@@ -263,6 +332,10 @@ class Ui(QMainWindow):
         self.predict_thread = ClassifyThread(processed_image)
         self.predict_thread.finished.connect(self.display_prediction)
         self.predict_thread.start()
+
+        self.pushButton_4.setEnabled(True)
+        self.pushButton_5.setEnabled(True)
+        self.pushButton_6.setEnabled(True)
 
     def display_prediction(self, prediction):
         self.loading_popup_hide()
