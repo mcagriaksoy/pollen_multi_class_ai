@@ -6,7 +6,7 @@ Importance: Accurate pollen classification has practical applications in various
 
 ## Screenshot
 
-![image](https://github.com/mcagriaksoy/pollen_multi_class_ai/assets/20202577/4213c51b-80c9-401a-86a3-200d0d9b040b)
+![image](https://github.com/mcagriaksoy/pollen_multi_class_ai/assets/20202577/72466c63-931a-48f5-aeae-2b399c19e1a1)
 
 ## Usage
 
