@@ -108,21 +108,22 @@ class Ui(QMainWindow):
         uic.loadUi("ui.ui", self)  # Load the .ui file
 
         self.classifyButton.setEnabled(False)
-        self.pushButton_4.setEnabled(False)
-        self.pushButton_5.setEnabled(False)
-        self.pushButton_6.setEnabled(False)
+         # #self.pushButton_5.setEnabled(False)
+         # #self.pushButton_6.setEnabled(False)
 
         self.pushButton.clicked.connect(self.load_img)
         self.classifyButton.clicked.connect(self.classify)
         self.pushButton_2.clicked.connect(self.clear)
         self.listWidget.itemClicked.connect(self.display_predicted_image)
         self.listWidget_4.itemClicked.connect(self.show_locations)
-        self.pushButton_4.clicked.connect(self.google_search)
-        self.pushButton_5.clicked.connect(self.show_global_map)
-        self.pushButton_6.clicked.connect(self.show_local_map)
+        self.web_ara.clicked.connect(self.google_search)
+         # #self.pushButton_5.clicked.connect(self.show_global_map)
+         # #self.pushButton_6.clicked.connect(self.show_local_map)
         self.pushButton_8.clicked.connect(self.open_localhost)
 
-
+        # if pushButton_11 go to the second tab
+        self.pushButton_11.clicked.connect(lambda: self.tabWidget.setCurrentIndex(1))
+        self.veritabanina_kaydet.clicked.connect(lambda: self.tabWidget.setCurrentIndex(2))
         self.fill_class_list()
 
         self.show()
@@ -145,7 +146,7 @@ class Ui(QMainWindow):
             self.m_thread = LoadModelThread()
             self.m_thread.finished.connect(self.loading_popup_hide)
             self.m_thread.start()
-
+    
     def open_localhost(self):
         """Open the localhost on the default web browser"""
         #Start the server
@@ -297,9 +298,8 @@ class Ui(QMainWindow):
         self.label.clear()
 
         self.classifyButton.setEnabled(False)
-        self.pushButton_4.setEnabled(False)
-        self.pushButton_5.setEnabled(False)
-        self.pushButton_6.setEnabled(False)
+         #self.pushButton_5.setEnabled(False)
+         #self.pushButton_6.setEnabled(False)
 
     def load_img(self):
         """
@@ -343,10 +343,9 @@ class Ui(QMainWindow):
         self.predict_thread = ClassifyThread(processed_image)
         self.predict_thread.finished.connect(self.display_prediction)
         self.predict_thread.start()
-
-        self.pushButton_4.setEnabled(True)
-        self.pushButton_5.setEnabled(True)
-        self.pushButton_6.setEnabled(True)
+        
+         #self.pushButton_5.setEnabled(True)
+         #self.pushButton_6.setEnabled(True)
 
     def display_prediction(self, prediction):
         self.loading_popup_hide()
