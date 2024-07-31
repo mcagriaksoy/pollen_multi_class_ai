@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>641</width>
-    <height>559</height>
+    <height>552</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -53,6 +53,24 @@
     <property name="currentIndex">
      <number>0</number>
     </property>
+    <widget class="QWidget" name="tab_5">
+     <attribute name="title">
+      <string>Page</string>
+     </attribute>
+     <widget class="QPushButton" name="pushButton_8">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>110</y>
+        <width>331</width>
+        <height>121</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Web Arayuzu Ac</string>
+      </property>
+     </widget>
+    </widget>
     <widget class="QWidget" name="tab">
      <property name="accessibleName">
       <string/>

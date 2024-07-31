@@ -23,8 +23,8 @@ from PyQt6.QtGui import QPixmap, QColor
 from PyQt6.QtCore import QThread, pyqtSignal, Qt
 import webbrowser
 from PIL import Image, ImageFilter
-from folium import Map, Polygon
-from onnxruntime import InferenceSession
+#from folium import Map, Polygon
+#from onnxruntime import InferenceSession
 
 # Error message definition
 ERROR = ""
@@ -120,6 +120,8 @@ class Ui(QMainWindow):
         self.pushButton_4.clicked.connect(self.google_search)
         self.pushButton_5.clicked.connect(self.show_global_map)
         self.pushButton_6.clicked.connect(self.show_local_map)
+        self.pushButton_8.clicked.connect(self.open_localhost)
+
 
         self.fill_class_list()
 
@@ -143,6 +145,15 @@ class Ui(QMainWindow):
             self.m_thread = LoadModelThread()
             self.m_thread.finished.connect(self.loading_popup_hide)
             self.m_thread.start()
+
+    def open_localhost(self):
+        """Open the localhost on the default web browser"""
+        #Start the server
+        import os
+        os.system("python -m http.server 8000")
+
+        webbrowser.open_new_tab("http://localhost:8000")
+
 
     def show_locations(self, item):
         """Show the location of the selected class on the map"""
