@@ -16,7 +16,7 @@ MODEL = None
 image_path = None
 
 dir_path = path.dirname("./")
-saved_model_path = dir_path + "/../model/model_v13.onnx"
+saved_model_path = dir_path + "/../model/model_v14.onnx"
 # Check there is a model file on the given dir
 if not path.exists(saved_model_path):
     ERROR = "Model dosyası bulunamadı. Lütfen model dosyasını kontrol edin."
@@ -120,7 +120,8 @@ def classify(main_window):
         Display the top 5 predicted classes and their probabilities in a QListWidget.
         """
         original = Image.open(image_path).resize((50, 50))
-        original = original.convert("RGB")
+        print(original.size)
+        #original = original.convert("RGB")
         numpy_image = array(original)
         image_batch = expand_dims(numpy_image, axis=0)
         processed_image = image_batch / 255.0

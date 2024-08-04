@@ -67,8 +67,15 @@ class MainWindow(QMainWindow):
         self.web_ara.clicked.connect(self.google_search)
         self.polen_arama_buton.clicked.connect(self.polen_listele)
 
-        # if pushButton_11 go to the second tab
-        self.go_to_polen_yukle.clicked.connect(lambda: self.tabWidget.setCurrentIndex(1))
+        self.taksonomik_arama.clicked.connect(lambda: self.tabWidget.setCurrentIndex(1))
+        self.taksonomik_arama.clicked.connect(lambda: self.toolBox.setCurrentIndex(0))
+        self.resim_ile_arama.clicked.connect(lambda: self.tabWidget.setCurrentIndex(1))
+        self.resim_ile_arama.clicked.connect(lambda: self.toolBox.setCurrentIndex(1))
+        self.bolgeye_gore_arama.clicked.connect(lambda: self.tabWidget.setCurrentIndex(1))
+        self.bolgeye_gore_arama.clicked.connect(lambda: self.toolBox.setCurrentIndex(2))
+        self.detayli_arama.clicked.connect(lambda: self.tabWidget.setCurrentIndex(1))
+        self.detayli_arama.clicked.connect(lambda: self.toolBox.setCurrentIndex(2)) # todo: change to 3
+
         self.veritabanina_kaydet.clicked.connect(lambda: self.tabWidget.setCurrentIndex(2))
         self.veritabanina_kaydet.clicked.connect(lambda: veritabani_guncelle(self, self.siniflandirma_sonuc_list.item(0).text()))
         self.fill_class_list()
