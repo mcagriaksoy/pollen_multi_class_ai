@@ -7,20 +7,22 @@
 # The app uses an ONNX model to classify the images.
 ############################################
 
-from os import listdir, path, remove
-from numpy import ndarray, float32, array, expand_dims, argsort
+from shared import class_names_instance
+from popup.popup import ProgressPopUp
+from database.ops import veritabani_guncelle
+from ai.ai import ClassifyThread, LoadModelThread, classify, load_img
+from paths.paths import path_manager
+from ui.ui import ui_manager
+from os import listdir, path, remove, scandir
+from numpy import float32, array, argsort
 
-from PyQt6 import uic
 from PyQt6.QtWidgets import (
-    QFileDialog,
     QMessageBox,
-    QProgressBar,
     QMainWindow,
-    QListWidgetItem,
     QApplication,
 )
-from PyQt6.QtGui import QPixmap, QColor
-from PyQt6.QtCore import QThread, pyqtSignal, Qt
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtCore import Qt
 import webbrowser
 from PIL import Image, ImageFilter
 #from folium import Map, Polygon
@@ -29,139 +31,104 @@ from PIL import Image, ImageFilter
 # Error message definition
 ERROR = ""
 
-# Model definition
-MODEL = None
 
 # Load the pre-trained model
 # Get current location
 
 # If operating system is windows
 dir_path = path.dirname("./")
-saved_model_path = dir_path + "/../model/model_v13.onnx"
-# Check there is a model file on the given dir
-if not path.exists(saved_model_path):
-    ERROR = "Model dosyası bulunamadı. Lütfen model dosyasını kontrol edin."
+class_dir = dir_path + "/../referans_polen/"
 
-# List of class names
-# Read class names from a file
-class_names = {}
-polen_locations = {}
-
-try:
-    with open(dir_path + "/desteklenen_polenler.txt", "r") as file:
-        if not file:
-            raise Exception(
-                "Veritabanı dosyası okunurken bir hata oluştu. Lütfen tekrar deneyin."
-            )
-        for line in file:
-            parts = line.split(":")
-            class_names[int(parts[1])] = parts[0].strip()
-            polen_locations[int(parts[1])] = parts[2].strip()
-except Exception as e:
-    ERROR = (
-        "Sınıf isimleri okunurken bir hata oluştu. Lütfen tekrar deneyin. Hata kodu: "
-        + str(e)
-    )
-
-
-class LoadModelThread(QThread):
-    finished = pyqtSignal()
-
-    def run(self):
-        try:
-            global MODEL
-            MODEL = InferenceSession(saved_model_path)
-        except Exception as e:
-            print("Error loading the model:", e)
-
-        # Disable classify button if model is not loaded
-        if not MODEL:
-            ERROR = "Model yüklenirken bir hata oluştu. Lütfen tekrar deneyin."
-            # exit the thread
-        self.finished.emit()
-
-
-class ClassifyThread(QThread):
-    finished = pyqtSignal(ndarray)
-
-    def __init__(self, processed_image):
-        super(ClassifyThread, self).__init__()
-        self.processed_image = processed_image
-
-    def run(self):
-        input_name = MODEL.get_inputs()[0].name
-        output_name = MODEL.get_outputs()[0].name
-        prediction = MODEL.run(
-            [output_name], {input_name: self.processed_image.astype(float32)}
-        )
-        self.finished.emit(prediction[0])
-
-
-class Ui(QMainWindow):
+class MainWindow(QMainWindow):
     def __init__(self):
         """
         Initialize the main window and load the UI file.
         Connect the button signals to their respective slots.
         """
-        super(Ui, self).__init__()
+        super(MainWindow, self).__init__()
+       
+        ui_manager.load_ui(self)
+        self.ui = ui_manager.get_ui()
+
         self.selected_class_name = "Hata!"
-        uic.loadUi("ui.ui", self)  # Load the .ui file
-
+        self.popup = None
+        self.show_error_popup("Loading, please wait...")
+        
         self.classifyButton.setEnabled(False)
-         # #self.pushButton_5.setEnabled(False)
-         # #self.pushButton_6.setEnabled(False)
 
-        self.pushButton.clicked.connect(self.load_img)
-        self.classifyButton.clicked.connect(self.classify)
+        self.diskten_polen_yukle.clicked.connect(load_img)
+
+        self.classify_thread = None
+        self.classifyButton.clicked.connect(lambda: classify(self))
+
         self.pushButton_2.clicked.connect(self.clear)
-        self.listWidget.itemClicked.connect(self.display_predicted_image)
+        self.siniflandirma_sonuc_list.itemClicked.connect(self.display_predicted_image)
         self.listWidget_4.itemClicked.connect(self.show_locations)
         self.web_ara.clicked.connect(self.google_search)
-         # #self.pushButton_5.clicked.connect(self.show_global_map)
-         # #self.pushButton_6.clicked.connect(self.show_local_map)
-        self.pushButton_8.clicked.connect(self.open_localhost)
+        self.polen_arama_buton.clicked.connect(self.polen_listele)
 
         # if pushButton_11 go to the second tab
-        self.pushButton_11.clicked.connect(lambda: self.tabWidget.setCurrentIndex(1))
+        self.go_to_polen_yukle.clicked.connect(lambda: self.tabWidget.setCurrentIndex(1))
         self.veritabanina_kaydet.clicked.connect(lambda: self.tabWidget.setCurrentIndex(2))
+        self.veritabanina_kaydet.clicked.connect(lambda: veritabani_guncelle(self, self.siniflandirma_sonuc_list.item(0).text()))
         self.fill_class_list()
 
+        # Show the UI!
         self.show()
+        
         # If ERROR str is not empty show the error message
+
         if ERROR:
             # Create a message box, if okay clicked close the program
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Icon.Critical)
-            msg.setText(ERROR)
-            msg.setWindowTitle("Hata")
-            msg.setStandardButtons(QMessageBox.StandardButton.Ok)
-            msg.exec()
-            exit(1)
+            self.show_error_popup(ERROR)
 
         else:
-            self.loading_popup_show(
-                "Lütfen Bekleyiniz!\nGereken model dosyaları yükleniyor...\n"
-            )
+            popup = ProgressPopUp("Lütfen Bekleyiniz!\nGereken model dosyaları yükleniyor...\n")
+            popup.show_popup()
             # Create an instance of the LoadModelThread
             self.m_thread = LoadModelThread()
-            self.m_thread.finished.connect(self.loading_popup_hide)
+            self.m_thread.finished.connect(popup.hide_popup)
             self.m_thread.start()
-    
-    def open_localhost(self):
-        """Open the localhost on the default web browser"""
-        #Start the server
-        import os
-        os.system("python -m http.server 8000")
 
-        webbrowser.open_new_tab("http://localhost:8000")
+    def show_error_popup(self, error_message):
+        popup = ProgressPopUp(error_message)
+        popup.show_popup()
 
+    def polen_listele(self):
+        """List the pollen classes in the second tab"""
+        # Clear the list
+        self.mikroskop_1.clear()
+        self.mikroskop_2.clear()
+        self.mikroskop_3.clear()
+
+        # Get the class names from comboboxes
+        cins = self.comboBox_cins.currentText()
+        epitet = self.comboBox_epitet.currentText()
+
+        # Open the class directory
+        class_name = cins + "_" + epitet
+        class_path = class_dir + class_name
+        # Check if the class directory exists
+        if not path.exists(class_path):
+            # Create a message box, if okay clicked close the program
+            # create_popup("Hata", "Sınıf dizini bulunamadı. Lütfen tekrar deneyin.")
+            return
+        
+        # Print the images on the labels
+        #self.google_img.setPixmap(QPixmap(class_path + "/google.jpg"))
+
+        # Show the mikroskop images search the all images in the directory
+        mikroskop_files = listdir(class_path)
+        #for i in range(0, len(mikroskop_files)):
+        self.mikroskop_1.setPixmap(QPixmap(class_path + "/" + mikroskop_files[0]))
+        #break
 
     def show_locations(self, item):
         """Show the location of the selected class on the map"""
         self.listWidget_2.clear()
 
         # find selected name in the class names
-        for key, value in class_names.items():
+        for key, value in class_names_instance.get_class_names().items():
             if value == item.text():
                 selected_class_num = key
                 break
@@ -172,9 +139,17 @@ class Ui(QMainWindow):
         """
         Fill the QListWidget with the class names.
         """
+        for key, value in class_names_instance.get_class_names().items():
+            # Split the class name and epitet name
+            parts = value.split("_")
+            class_name = parts[0]
+            epitet_name = parts[1] if len(parts) > 1 else ""
 
-        for key, value in class_names.items():
-            self.listWidget_4.addItem(value)
+            # Add to the respective ComboBoxes
+            self.comboBox_cins.addItem(class_name)
+            self.comboBox_epitet.addItem(epitet_name)
+    
+
 
     def show_global_map(self):
         """
@@ -217,10 +192,10 @@ class Ui(QMainWindow):
             )
             image_files = listdir(image_dir)
             image_path = path.join(image_dir, image_files[0])
+            path_manager.set_path('image_path', image_path)
 
             # Print Original version
-            pixmap = QPixmap(image_path)
-            self.label_3.setPixmap(pixmap)
+            self.label_3.setPixmap(QPixmap(image_path))
 
             # Print only edges
             img = Image.open(image_path)
@@ -252,45 +227,17 @@ class Ui(QMainWindow):
 
     def google_search(self):
         """Search the query in google"""
-        if self.listWidget.count() == 0:
+        if self.siniflandirma_sonuc_list.count() == 0:
             return
 
         url = "https://www.google.com/search?q=" + self.selected_class_name
         webbrowser.open_new_tab(url)
 
-    def loading_popup_show(self, str):
-        """Show the information"""
-        self.msg = QMessageBox()
-        self.msg.setIcon(QMessageBox.Icon.Information)
-        self.msg.setStandardButtons(QMessageBox.StandardButton.NoButton)
-        self.msg.setWindowFlags(
-            Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint
-        )
-        self.msg.setText(str)
-
-        self.progress = QProgressBar(self.msg)
-        self.progress.setGeometry(60, 45, 200, 15)
-        self.progress.setMaximum(0)
-        self.progress.setMinimum(0)
-        self.progress.setValue(0)
-        self.msg.show()
-
-    def loading_popup_hide(self):
-        """Hide the information"""
-        # delete the message
-        self.msg.deleteLater()
-        self.progress.deleteLater()
-
-    def loading_popup_hide(self):
-        """Hide the information"""
-        # delete the message
-        self.msg.deleteLater()
-
     def clear(self):
         """
         Clear the image, image name, and top 5 predicted classes from the UI.
         """
-        self.listWidget.clear()
+        self.siniflandirma_sonuc_list.clear()
         self.label_3.clear()
         self.label_9.clear()
         self.label_10.clear()
@@ -301,73 +248,7 @@ class Ui(QMainWindow):
          #self.pushButton_5.setEnabled(False)
          #self.pushButton_6.setEnabled(False)
 
-    def load_img(self):
-        """
-        Open a file dialog to select an image file.
-        Display the selected image in a QLabel.
-        Set the image name to another QLabel.
-        """
-        try:
-            fname = QFileDialog.getOpenFileName(
-                self,
-                "Open file",
-                dir_path,
-                "Image files (*.jpg *.png *.bmp *.heic *.jpeg)",
-            )
-        except Exception as e:
-            print("Seçilen görüntü açılamadı Hata kodu:", e)
-            return
-
-        # clear all
-        self.clear()
-
-        self.classifyButton.setEnabled(True)
-
-        self.image_path = fname[0]
-        pixmap = QPixmap(self.image_path)
-        self.label.setPixmap(pixmap)
-        # Set image name to label_2
-        self.label_2.setText(path.basename(self.image_path))
-
-    def classify(self):
-        """
-        Load the selected image, preprocess it, and classify it using the pre-trained model.
-        Display the top 5 predicted classes and their probabilities in a QListWidget.
-        """
-        original = Image.open(self.image_path).resize((50, 50))
-        original = original.convert("RGB")
-        numpy_image = array(original)
-        image_batch = expand_dims(numpy_image, axis=0)
-        processed_image = image_batch / 255.0
-        self.loading_popup_show("Lütfen Bekleyiniz!\nGörüntü sınıflandırılıyor...\n")
-        self.predict_thread = ClassifyThread(processed_image)
-        self.predict_thread.finished.connect(self.display_prediction)
-        self.predict_thread.start()
-        
-         #self.pushButton_5.setEnabled(True)
-         #self.pushButton_6.setEnabled(True)
-
-    def display_prediction(self, prediction):
-        self.loading_popup_hide()
-        # Clear the list
-        self.listWidget.clear()
-
-        top_10 = argsort(prediction[0])[-10:][::-1]
-
-        for i in top_10:
-            # Print percentage of accuracy instead the raw data
-            percentage = prediction[0][i] * 100
-            if percentage < 0.11:
-                continue
-            item = QListWidgetItem(f"{class_names[i]}: {percentage:.2f}%")
-            self.listWidget.addItem(item)
-
-        # Set the background color of the top 5 classes to green
-        item = self.listWidget.item(0)
-        item.setBackground(QColor(0, 255, 0))
-
-
 app = QApplication([])
 
-window = Ui()
+window = MainWindow()
 app.exec()
