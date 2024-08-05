@@ -1,0 +1,700 @@
+{
+    "pollens": [
+        {
+            "cins_name": "acacia",
+            "epitet_name": "plumosa",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "acer",
+            "epitet_name": "pseudoplatanus",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "acrocomia",
+            "epitet_name": "aculeta",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "aesculus",
+            "epitet_name": "carnea",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "alicotome",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "alnus",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "anadenanthera",
+            "epitet_name": "colubrina",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "anthoxanthum",
+            "epitet_name": "grass",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "arachis",
+            "epitet_name": "sp",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "archontophoenix",
+            "epitet_name": "cunninghamiana",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "arecaceae",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "arrabidaea",
+            "epitet_name": "florida",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "aspilia",
+            "epitet_name": "grazielae",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "astanea",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "bacopa",
+            "epitet_name": "australis",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "benus",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "betula",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "brassica",
+            "epitet_name": "napus",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "brugmansia",
+            "epitet_name": "suaveolens",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "caesalpinia",
+            "epitet_name": "peltophoroides",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "carpinus",
+            "epitet_name": "betulus",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "caryocar",
+            "epitet_name": "brasiliensis",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "cecropia",
+            "epitet_name": "pachystachya",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "ceiba",
+            "epitet_name": "speciosa",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "chromolaena",
+            "epitet_name": "laevigata",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "cissus",
+            "epitet_name": "campestris",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "cissus",
+            "epitet_name": "spinosa",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "combretum",
+            "epitet_name": "discolor",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "cordia",
+            "epitet_name": "trichotoma",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "corylus",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "cosmos",
+            "epitet_name": "caudatus",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "croton",
+            "epitet_name": "urucurana",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "dactylis",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "dianella",
+            "epitet_name": "tasmanica",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "dipteryx",
+            "epitet_name": "alata",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "doliocarpus",
+            "epitet_name": "dentatus",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "eratonia",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "erula",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "erythrina",
+            "epitet_name": "mulungu",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "eucalyptus",
+            "epitet_name": "sp",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "faramea",
+            "epitet_name": "sp",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "fraxinus",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "genipa",
+            "epitet_name": "auniricana",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "gomphrena",
+            "epitet_name": "sp",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "guapuruvu",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "guazuma",
+            "epitet_name": "ulmifolia",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "hortia",
+            "epitet_name": "oreadica",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "hyptis",
+            "epitet_name": "sp",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "ligustrum",
+            "epitet_name": "lucidum",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "luehea",
+            "epitet_name": "divaricata",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "mabea",
+            "epitet_name": "fistulifera",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "machaerium",
+            "epitet_name": "aculeatum",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "magnolia",
+            "epitet_name": "champaca",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "manihot",
+            "epitet_name": "esculenta",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "matayba",
+            "epitet_name": "guianensis",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "mauritia",
+            "epitet_name": "flexuosa",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "mimosa",
+            "epitet_name": "ditans",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "mimosa",
+            "epitet_name": "ditrans",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "mimosa",
+            "epitet_name": "pigra",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "mitostemma",
+            "epitet_name": "brevifilis",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "myracroduon",
+            "epitet_name": "urundeuva",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "myrcia",
+            "epitet_name": "guianensis",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "not",
+            "epitet_name": "polen",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "ochroma",
+            "epitet_name": "pyramidale",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "olea",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "origanum",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "ouratea",
+            "epitet_name": "hexasperma",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "oxalis",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "pachira",
+            "epitet_name": "aquatica",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "palmeira",
+            "epitet_name": "real",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "passiflora",
+            "epitet_name": "gibertii",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "paullinia",
+            "epitet_name": "spicata",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "pinus",
+            "epitet_name": "nigra",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "piper",
+            "epitet_name": "aduncum",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "pistacia",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "platanus",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "poaceae",
+            "epitet_name": "sp",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "populus",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "protium",
+            "epitet_name": "heptaphyllum",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "prunus",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "qualea",
+            "epitet_name": "multiflora",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "rica",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "ricinus",
+            "epitet_name": "communis",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "salvia",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "satureja",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "schinus",
+            "epitet_name": "sp",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "schizolobium",
+            "epitet_name": "parahyba",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "senegalia",
+            "epitet_name": "plumosa",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "sequoiadendron-giganteum",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "serjania",
+            "epitet_name": "erecta",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "serjania",
+            "epitet_name": "hebecarpa",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "serjania",
+            "epitet_name": "laruotteana",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "serjania",
+            "epitet_name": "sp",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "sida",
+            "epitet_name": "cerradoensis",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "sinapis",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "solanum",
+            "epitet_name": "sisymbriifolium",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "sphodelus",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "syagrus",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "syagrus",
+            "epitet_name": "romanzoffiana",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "symplocos",
+            "epitet_name": "nitens",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "tabebuia",
+            "epitet_name": "chysotricha",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "tabebuia",
+            "epitet_name": "rosealba",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "tapirira",
+            "epitet_name": "guianensis",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "taxus",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "thymbra",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "tradescantia",
+            "epitet_name": "pallida",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "trema",
+            "epitet_name": "micrantha",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "trembleya",
+            "epitet_name": "phlogiformis",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "tridax",
+            "epitet_name": "procumbens",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "ucalyptus",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "urginea",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "urochloa",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "vitis",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "vochysia",
+            "epitet_name": "divergens",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "yrtus",
+            "epitet_name": "",
+            "location": "Unknown",
+            "shape": "Unknown"
+        },
+        {
+            "cins_name": "zea",
+            "epitet_name": "mays",
+            "location": "Unknown",
+            "shape": "Unknown"
+        }
+    ]
+}

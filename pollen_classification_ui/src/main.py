@@ -9,7 +9,7 @@
 
 from shared import class_names_instance
 from popup.popup import ProgressPopUp
-from database.ops import veritabani_guncelle
+from database.ops import bilgileriGetir, veritabaniGuncelleJson
 from ai.ai import ClassifyThread, LoadModelThread, classify, load_img
 from paths.paths import path_manager
 from ui.ui import ui_manager
@@ -38,6 +38,7 @@ ERROR = ""
 # If operating system is windows
 dir_path = path.dirname("./")
 class_dir = dir_path + "/../referans_polen/"
+DATABASE_PATH = dir_path + "/../database/pollen_info.json"
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -77,8 +78,9 @@ class MainWindow(QMainWindow):
         self.detayli_arama.clicked.connect(lambda: self.toolBox.setCurrentIndex(2)) # todo: change to 3
 
         self.veritabanina_kaydet.clicked.connect(lambda: self.tabWidget.setCurrentIndex(2))
-        self.veritabanina_kaydet.clicked.connect(lambda: veritabani_guncelle(self, self.siniflandirma_sonuc_list.item(0).text()))
-        self.fill_class_list()
+        self.veritabanina_kaydet.clicked.connect(lambda: bilgileriGetir(self, self.siniflandirma_sonuc_list.item(0).text()))
+        
+        self.veritabanina_gonder.clicked.connect(self.json_guncelle)
 
         # Show the UI!
         self.show()
@@ -97,6 +99,18 @@ class MainWindow(QMainWindow):
             self.m_thread.finished.connect(popup.hide_popup)
             self.m_thread.start()
 
+    def json_guncelle(self):
+        """
+        Update the database with the selected class.
+        """
+        sinif = self.bulunan_sinif.toPlainText()
+        epitet = self.bulunan_epitet.toPlainText()
+        location = self.ulke.currentText() + ", " + self.ulke.currentText() + ", " + self.ilce.currentText()
+        shape = self.sekil.currentText()
+        # Update the Json file
+        veritabaniGuncelleJson(self, sinif, epitet, location, shape, DATABASE_PATH)
+
+    
     def show_error_popup(self, error_message):
         popup = ProgressPopUp(error_message)
         popup.show_popup()
@@ -133,30 +147,7 @@ class MainWindow(QMainWindow):
     def show_locations(self, item):
         """Show the location of the selected class on the map"""
         self.listWidget_2.clear()
-
-        # find selected name in the class names
-        for key, value in class_names_instance.get_class_names().items():
-            if value == item.text():
-                selected_class_num = key
-                break
-
         self.listWidget_2.addItem(polen_locations[selected_class_num])
-
-    def fill_class_list(self):
-        """
-        Fill the QListWidget with the class names.
-        """
-        for key, value in class_names_instance.get_class_names().items():
-            # Split the class name and epitet name
-            parts = value.split("_")
-            class_name = parts[0]
-            epitet_name = parts[1] if len(parts) > 1 else ""
-
-            # Add to the respective ComboBoxes
-            self.comboBox_cins.addItem(class_name)
-            self.comboBox_epitet.addItem(epitet_name)
-    
-
 
     def show_global_map(self):
         """

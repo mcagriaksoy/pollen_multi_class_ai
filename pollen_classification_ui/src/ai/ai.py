@@ -16,7 +16,7 @@ MODEL = None
 image_path = None
 
 dir_path = path.dirname("./")
-saved_model_path = dir_path + "/../model/model_v14.onnx"
+saved_model_path = dir_path + "/../model/model_v13.onnx"
 # Check there is a model file on the given dir
 if not path.exists(saved_model_path):
     ERROR = "Model dosyası bulunamadı. Lütfen model dosyasını kontrol edin."
@@ -104,10 +104,14 @@ def display_prediction(self, prediction):
         percentage = prediction[0][i] * 100
         if percentage < 0.11:
             continue
-        
-        name = class_names_instance.get_class_names().get(i)
-        #name = "Class"
-        item = QListWidgetItem(f"{name}: {percentage:.2f}%")
+    
+        # Get the class and epitet name from the class_names_instance
+
+        # Get the i th element from the class_names list
+        class_name = class_names_instance.get_class_names(i)
+        print(class_name)
+        item = QListWidgetItem(f"{class_name} - %{percentage:.2f}")
+
         self.siniflandirma_sonuc_list.addItem(item)
 
     # Set the background color of the top 5 classes to green
